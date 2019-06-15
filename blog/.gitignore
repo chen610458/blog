@@ -1,0 +1,11 @@
+<<<<<<< HEAD
+*~
+__pycache__
+
+*.pyc
+=======
+*~
+__pycache__
+*.pyc
+
+>>>>>>> branch 'master' of https://github.com/chen610458/blog
