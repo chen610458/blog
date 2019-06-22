@@ -4,6 +4,7 @@ from django.contrib import messages
 
 from article.models import Article, Comment
 from article.forms import ArticleForm
+from django.db.models.query_utils import Q
 
 
 
@@ -25,7 +26,7 @@ def articleCreate(request):
         2. If method is POST, perform form validation and display error messages if the form is invalid
         3. Save the form to the model and redirect the user to the article page
     '''
-    template = 'article/articleCreate.html'
+    template = 'article/articleCreateUpdate.html'
     if request.method == 'GET':
         return render(request, template, {'articleForm':ArticleForm()})
     
@@ -53,5 +54,57 @@ def articleRead(request, articleId):
     }
     return render(request, 'article/articleRead.html', context)
 
+def articleUpdate(request, articleId):
+    '''
+    Update the article instance:
+        1. Get the article to update; redirect to 404 if not found
+        2. Render a bound form if the method is GET
+        3. If the form is valid, save it to the model, otherwise render a
+           bound form with error messages
+    '''
+    # TODO: finish the code
+    article = get_object_or_404(Article, id=articleId)
+    template = 'article/articleCreateUpdate.html'
+    if request.method == 'GET':
+        articleForm = ArticleForm(instance=article)
+        return render(request, template, {'articleForm':articleForm})
+
+    # POST
+    articleForm = ArticleForm(request.POST, instance=article)
+    if not articleForm.is_valid():
+        return render(request, template, {'articleForm':articleForm})
+
+    articleForm.save()
+    messages.success(request, '文章已修改') 
+    return redirect('article:articleRead', articleId=articleId)
+
 
     #eturn render(request, 'article/article.html')
+def articleDelete(request, articleId):
+    '''
+    Delete the article instance:
+        ...
+    '''
+    # TODO: finish the code
+    if request.method == 'GET':
+        return redirect('article:article')
+
+    # POST
+    article = get_object_or_404(Article, id=articleId)
+    article.delete()
+    messages.success(request, '文章已刪除')  
+    return redirect('article:article')
+
+def articleSearch(request):
+    '''
+    Search for articles:
+        1. Get the "searchTerm" from the HTML page
+        2. Use "searchTerm" for filtering
+    '''
+    # TODO: finish the code
+    searchTerm = request.GET.get('searchTerm')
+    articles = Article.objects.filter(Q(title__icontains=searchTerm) |
+                                      Q(content__icontains=searchTerm))
+    context = {'articles':articles, 'searchTerm':searchTerm} 
+    return render(request, 'article/articleSearch.html', context)
+

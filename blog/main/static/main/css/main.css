@@ -15,6 +15,11 @@ html, body {
   height: 100%;
 }
 
+/* Misc */
+.inlineBlock {
+  display: inline-block;
+}
+
 body {
   padding: 20px;
   background: url("/static/main/img/background.png") fixed;
