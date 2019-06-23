@@ -269,5 +269,3 @@ LOGIN_URL = '/account/login/'
 # For Heroku deployment
 STATIC_ROOT = 'staticfiles'
 
-# For Heroku deployment
-STATIC_ROOT = 'staticfiles'
